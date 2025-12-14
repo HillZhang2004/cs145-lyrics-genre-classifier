@@ -1,10 +1,10 @@
-# large / local-only
-data/raw/
-data/full/
-*.npy
-*.pt
-*.ckpt
-.venv/
+# data
+data/
+*.csv
+
+# python / notebooks
 __pycache__/
 .ipynb_checkpoints/
-.DS_Store
+
+# virtual env
+.venv/
