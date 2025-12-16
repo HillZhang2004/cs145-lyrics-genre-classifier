@@ -5,7 +5,7 @@ Labels: **Folk, Jazz, Metal, Pop, Rock**.
 
 **TL;DR takeaway:** A strong classic baseline (TF-IDF) matches or beats “modern” embeddings on this task, and most errors collapse into **Rock** (the model’s “magnet” class).
 
-## Quick links (for recruiters)
+## Quick links 
 
 Slides (project overview + results):
 https://docs.google.com/presentation/d/10pTTQb_L21_sDHcCswdqTa61122DklkoD4eUYz3HnkM/edit?usp=sharing
