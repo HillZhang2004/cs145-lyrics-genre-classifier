@@ -120,7 +120,7 @@ Optional: install deps (example):
 ```bash
 pip install -U pandas numpy scikit-learn matplotlib sentence-transformers torch
 ```
-Notes / what I learned
+## Notes / what I learned
 
 TF-IDF is a surprisingly strong baseline for lyric-only classification.
 
