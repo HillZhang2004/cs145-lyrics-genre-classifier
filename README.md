@@ -5,15 +5,10 @@ Labels: **Folk, Jazz, Metal, Pop, Rock**.
 
 **TL;DR takeaway:** A strong classic baseline (TF-IDF) matches or beats “modern” embeddings on this task, and most errors collapse into **Rock** (the model’s “magnet” class).
 
-## Quick links 
+## Quick links
 
-Slides (project overview + results):
+Slides (project overview + results):  
 https://docs.google.com/presentation/d/10pTTQb_L21_sDHcCswdqTa61122DklkoD4eUYz3HnkM/edit?usp=sharing
-
-Key visuals (in this repo):
-- PCA of MiniLM embeddings: [`assets/figures/pca_minilm_embeddings.png`](assets/figures/pca_minilm_embeddings.png)
-- Normalized confusion matrix (TF-IDF + LR): [`assets/figures/confusion_matrix_tfidf_lr.png`](assets/figures/confusion_matrix_tfidf_lr.png)
-- Top TF-IDF words (example: Folk): [`assets/figures/top_tfidf_words_folk.png`](assets/figures/top_tfidf_words_folk.png)
 
 ## Results (held-out test set)
 
@@ -26,6 +21,29 @@ I keep the classifier fixed (**multiclass logistic regression**) and only change
 | MiniLM + Autoencoder (64d latent) | 0.5939 | 0.3938 |
 
 **Interpretation:** Accuracy is similar for TF-IDF and MiniLM, but TF-IDF wins on macro-F1. The autoencoder compression loses signal for this label set.
+
+### Confusion matrix (TF-IDF + Logistic Regression)
+
+![Normalized confusion matrix (TF-IDF + LR)](assets/figures/confusion_matrix_tfidf_lr.png)
+
+**Key failure modes (what the plot shows):**
+- **Rock is the “magnet” class**: many non-Rock songs get predicted as Rock.
+- **Folk → Rock** is especially common, suggesting overlapping lyric/style cues under bag-of-words features.
+- **Jazz and Metal** also drift toward Rock often, while **Pop** is more separable but still confuses with Rock.
+
+## Visual intuition checks
+
+### PCA of MiniLM embeddings (2D projection)
+
+![PCA of MiniLM lyric embeddings](assets/figures/pca_minilm_embeddings.png)
+
+**What this suggests:** genres overlap heavily in embedding space (at least in 2D PCA), which aligns with why embeddings did not clearly outperform TF-IDF on macro-F1.
+
+### Example feature inspection (TF-IDF)
+
+![Top TF-IDF words for Folk](assets/figures/top_tfidf_words_folk.png)
+
+**What this suggests:** the model is learning genre-associated vocabulary patterns, but many words are not genre-unique, which can contribute to cross-genre confusion.
 
 ## Data and split
 
@@ -72,5 +90,5 @@ Typical dependencies:
 ## Notes / what I learned
 
 - TF-IDF is a surprisingly strong baseline for lyric-only classification.
-- The confusion matrix shows Rock absorbs many mistakes, suggesting lyric style features overlap heavily across genres.
 - Embeddings are not automatically “better”; representation choice depends on the task and evaluation metric (macro-F1 mattered here).
+- The largest errors concentrate into Rock, suggesting genre boundaries are fuzzy from lyrics alone, and class imbalance or label noise may play a role.
