@@ -5,6 +5,13 @@ Labels: **Folk, Jazz, Metal, Pop, Rock**.
 
 **TL;DR takeaway:** A strong classic baseline (**TF-IDF**) matches or beats “modern” embeddings on this task, and many errors collapse into **Rock** (the model’s “magnet” class).
 
+## Project highlights (for recruiters)
+
+- **NLP features:** TF-IDF vs. MiniLM sentence embeddings (384d)
+- **Modeling:** multiclass logistic regression, tuned via validation **macro-F1**
+- **Representation learning:** MLP autoencoder to compress embeddings (64d latent)
+- **Evaluation + diagnostics:** macro-F1, normalized confusion matrix, PCA visualization, feature inspection
+
 ## Quick links
 
 - Slides (project overview + results, Google Slides):  
@@ -36,7 +43,7 @@ I keep the classifier fixed (**multiclass logistic regression**) and only change
 
 ## Confusion matrix (TF-IDF + Logistic Regression)
 
-<img src="assets/figures/confusion_matrix_tfidf_lr.png" width="650">
+![Normalized confusion matrix (TF-IDF + LR)](assets/figures/confusion_matrix_tfidf_lr.png)
 
 Key failure modes (what the plot shows):
 - **Rock is the “magnet” class:** many non-Rock songs get predicted as Rock.
@@ -49,7 +56,7 @@ Key failure modes (what the plot shows):
 
 ### PCA of MiniLM embeddings (2D projection)
 
-<img src="assets/figures/pca_minilm_embeddings.png" width="650">
+![PCA of MiniLM lyric embeddings](assets/figures/pca_minilm_embeddings.png)
 
 What this suggests: genres overlap heavily in embedding space (at least in 2D PCA), which aligns with why embeddings did not clearly outperform TF-IDF on macro-F1.
 
@@ -57,7 +64,7 @@ What this suggests: genres overlap heavily in embedding space (at least in 2D PC
 
 ## Example feature inspection (TF-IDF)
 
-<img src="assets/figures/top_tfidf_words_folk.png" width="650">
+![Top TF-IDF words for Folk](assets/figures/top_tfidf_words_folk.png)
 
 What this suggests: the model is learning genre-associated vocabulary patterns, but many words are not genre-unique, which can contribute to cross-genre confusion.
 
@@ -109,15 +116,16 @@ All models use logistic regression; only the representation changes:
 3. Open and run:
    - `notebooks/lyrics_genre_project.ipynb`
 
-Optional: create an env and install deps (example):
+Optional: install deps (example):
 ```bash
 pip install -U pandas numpy scikit-learn matplotlib sentence-transformers torch
 ```
+Notes / what I learned
 
-## Notes / what I learned
+TF-IDF is a surprisingly strong baseline for lyric-only classification.
 
-- TF-IDF is a surprisingly strong baseline for lyric-only classification.
-- Embeddings are not automatically “better”; representation choice depends on the task and evaluation metric (macro-F1 mattered here).
-- The largest errors concentrate into Rock, suggesting genre boundaries are fuzzy from lyrics alone, and class imbalance or label noise may play a role.
+Embeddings are not automatically “better”; representation choice depends on the task and evaluation metric (macro-F1 mattered here).
+
+The largest errors concentrate into Rock, suggesting genre boundaries are fuzzy from lyrics alone, and class imbalance or label noise may play a role.
 
 Reproducibility note: results can shift slightly with different random seeds / splits, but the overall ranking (TF-IDF ≥ MiniLM, autoencoder worst) was consistent in my runs.
